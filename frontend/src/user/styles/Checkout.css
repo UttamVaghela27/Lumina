@@ -1,0 +1,358 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap");
+
+:root {
+  --checkout-bg: #f5efe9; /* Applied user requested color */
+  --checkout-card: #ffffff;
+  --checkout-accent: #e5b7b7; /* Soft Rose */
+  --checkout-text-dark: #2f2421; /* Espresso */
+  --checkout-text-muted: #6b5d5a;
+  --checkout-border: #e8e1de;
+  --checkout-button: #2f2421;
+  --checkout-button-hover: #4a3a36;
+}
+
+.checkout-page {
+  background-color: var(--checkout-bg);
+  min-height: 100vh;
+  padding: 40px 20px;
+  font-family: "Inter", sans-serif;
+  color: var(--checkout-text-dark);
+}
+
+@media (max-width: 600px) {
+  .checkout-page {
+    padding: 20px 10px;
+  }
+}
+
+.checkout-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 40px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .checkout-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+.checkout-main {
+  position: sticky;
+  top: 120px;
+  height: fit-content;
+}
+
+@media (max-width: 900px) {
+  .checkout-main {
+    position: static;
+    order: 1;
+  }
+}
+
+.checkout-title {
+  font-family: "Playfair Display", serif;
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.checkout-section {
+  background: var(--checkout-card);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(47, 36, 33, 0.05);
+  border: 1px solid var(--checkout-border);
+  margin-bottom: 25px;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--checkout-border);
+  padding-bottom: 12px;
+}
+
+/* Shipping Form */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group.full-width {
+  grid-column: span 2;
+}
+
+@media (max-width: 600px) {
+  .form-group.full-width {
+    grid-column: span 1;
+  }
+}
+
+.form-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--checkout-text-muted);
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--checkout-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+  background-color: #fafafa;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--checkout-accent);
+  box-shadow: 0 0 0 4px rgba(229, 183, 183, 0.1);
+  background-color: #fff;
+}
+
+/* Payment Selector */
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border: 1px solid var(--checkout-border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.payment-option:hover {
+  background-color: rgba(229, 183, 183, 0.05);
+}
+
+.payment-option.active {
+  border-color: var(--checkout-accent);
+  background-color: rgba(229, 183, 183, 0.1);
+}
+
+.payment-option input {
+  margin-right: 15px;
+  accent-color: var(--checkout-text-dark);
+}
+
+.payment-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.payment-name {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.payment-desc {
+  font-size: 0.85rem;
+  color: var(--checkout-text-muted);
+}
+
+/* Order Summary */
+.summary-card {
+  position: sticky;
+  top: 120px;
+  height: fit-content;
+}
+
+@media (max-width: 900px) {
+  .summary-card {
+    position: static;
+    order: 2;
+  }
+}
+
+.summary-items {
+  max-height: 250px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  padding-right: 5px;
+}
+
+/* Custom Scrollbar for Items */
+.summary-items::-webkit-scrollbar {
+  width: 4px;
+}
+.summary-items::-webkit-scrollbar-thumb {
+  background: var(--checkout-border);
+  border-radius: 10px;
+}
+
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.item-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.item-img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--checkout-border);
+}
+
+.item-name {
+  font-weight: 500;
+  font-size: 0.9rem;
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 600px) {
+  .item-name {
+    max-width: 140px;
+  }
+}
+
+.item-qty {
+  font-size: 0.8rem;
+  color: var(--checkout-text-muted);
+}
+
+.item-price {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.total-section {
+  border-top: 1px solid var(--checkout-border);
+  padding-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+}
+
+.total-row.grand-total {
+  font-weight: 800;
+  font-size: 1.3rem;
+  margin-top: 10px;
+  border-top: 2px solid var(--checkout-bg);
+  padding-top: 15px;
+}
+
+.place-order-btn {
+  width: 100%;
+  padding: 18px;
+  background-color: var(--checkout-button);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 25px;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.place-order-btn:hover:not(:disabled) {
+  background-color: var(--checkout-button-hover);
+  transform: translateY(-2px);
+}
+
+.place-order-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.place-order-btn:disabled {
+  background-color: var(--checkout-text-muted);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.icon-rose {
+  color: var(--checkout-accent);
+}
+
+.chk-back-link {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+  color: #6b5d5a;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.chk-prepaid-badge {
+  margin-left: auto;
+  font-size: 0.8rem;
+  background: #e5b7b7;
+  color: #2f2421;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.chk-free-text {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.chk-delivery-note {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #6b5d5a;
+  margin-top: 15px;
+}
+
+.chk-delivery-icon {
+  margin-right: 5px;
+  vertical-align: middle;
+}
