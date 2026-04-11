@@ -25,7 +25,6 @@ const Products = () => {
     return (
       <div className="admin-loading-container">
         <div className="loader"></div>
-        <p>Loading collection...</p>
       </div>
     );
   }

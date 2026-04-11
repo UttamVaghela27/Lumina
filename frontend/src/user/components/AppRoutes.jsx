@@ -7,7 +7,7 @@ const PageLoader = () => (
   </div>
 );
 
-// User Pages - Lazy Loaded
+// User Pages 
 const Register = lazy(() => import("../pages/Register"));
 const Login = lazy(() => import("../pages/Login"));
 const ForgotPassword = lazy(() => import("../pages/ForgotPassword"));
@@ -23,13 +23,13 @@ const SingleProduct = lazy(() => import("../pages/SingleProduct"));
 const Checkout = lazy(() => import("../pages/Checkout"));
 const OrderSuccess = lazy(() => import("../pages/OrderSuccess"));
 
-// Policy Pages - Lazy Loaded
+// Policy Pages 
 const Terms = lazy(() => import("../pages/Terms"));
 const Privacy = lazy(() => import("../pages/Privacy"));
 const Refunds = lazy(() => import("../pages/Refunds"));
 const Shipping = lazy(() => import("../pages/Shipping"));
 
-// Admin - Lazy Loaded
+// Admin 
 const AdminProtectedRoute = lazy(() => import("../../admin/components/AdminProtectedRoute"));
 const AdminLayout = lazy(() => import("../../admin/components/AdminLayout"));
 const Dashboard = lazy(() => import("../../admin/pages/Dashboard"));
