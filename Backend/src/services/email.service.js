@@ -21,6 +21,7 @@ const sendEmail = async (to, subject, text, html) => {
       host: "smtp.gmail.com",
       port: 465,
       secure: true,
+      family: 4,
       auth: {
         type: "OAuth2",
         user: process.env.GOOGLE_USER,
