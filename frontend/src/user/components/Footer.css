@@ -134,10 +134,15 @@
   }
 
   .footer-container {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 35px;
     text-align: center;
     margin-bottom: 40px;
+  }
+
+  .footer-brand,
+  .footer-newsletter {
+    grid-column: span 2;
   }
 
   .footer-brand h2 {
