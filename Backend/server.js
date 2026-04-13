@@ -10,4 +10,20 @@ const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-});
+
+  if (process.env.NODE_ENV === "production" && process.env.BACKEND_URL) {
+    setInterval(
+      () => {
+        const https = require("https");
+        https
+          .get(`${process.env.BACKEND_URL}/ping`, (res) => {
+            console.log(`Self-ping status: ${res.statusCode}`);
+          })
+          .on("error", (err) => {
+            console.error(`Self-ping error: ${err.message}`);
+          });
+      },
+      14 * 60 * 1000,
+    ); // 14 minutes
+  }
+});

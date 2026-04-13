@@ -25,7 +25,7 @@ const Navbar = () => {
   return (
     <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
       <div className="container nav-container">
-        <Link to="/" className="logo">
+        <Link to="/" className="logo" onClick={() => setMobileOpen(false)}>
           Lumina.
         </Link>
 
@@ -33,24 +33,28 @@ const Navbar = () => {
           <Link
             to="/"
             className={`nav-link ${location.pathname === "/" ? "active" : ""}`}
+            onClick={() => setMobileOpen(false)}
           >
             Home
           </Link>
           <Link
             to="/products"
             className={`nav-link ${location.pathname.includes("/product") ? "active" : ""}`}
+            onClick={() => setMobileOpen(false)}
           >
             Shop
           </Link>
           <Link
             to="/about"
             className={`nav-link ${location.pathname === "/about" ? "active" : ""}`}
+            onClick={() => setMobileOpen(false)}
           >
             About
           </Link>
           <Link
             to="/contact"
             className={`nav-link ${location.pathname === "/contact" ? "active" : ""}`}
+            onClick={() => setMobileOpen(false)}
           >
             Contact
           </Link>
@@ -59,26 +63,26 @@ const Navbar = () => {
         <div className="nav-icons">
           {user ? (
             <>
-              <Link to="/profile" className="icon-btn" aria-label="Profile">
+              <Link to="/profile" className="icon-btn" aria-label="Profile" onClick={() => setMobileOpen(false)}>
                 <User size={22} />
               </Link>
-              <Link to="/cart" className="icon-btn cart-icon" aria-label="Cart">
+              <Link to="/cart" className="icon-btn cart-icon" aria-label="Cart" onClick={() => setMobileOpen(false)}>
                 <ShoppingCart size={22} />
                 {cartItems.length > 0 && (
                     <span className="cart-count">{cartItems.length}</span>
                 )}
               </Link>
 
-              <button onClick={onLogout} className="btn btn-primary nav-btn">
+              <button onClick={() => { onLogout(); setMobileOpen(false); }} className="btn btn-primary nav-btn">
                 Logout
               </button>
             </>
           ) : (
             <div className="auth-links">
-              <Link to="/login" className="nav-link auth-login-link">
+              <Link to="/login" className="nav-link auth-login-link" onClick={() => setMobileOpen(false)}>
                 Login
               </Link>
-              <Link to="/register" className="btn btn-primary nav-btn">
+              <Link to="/register" className="btn btn-primary nav-btn" onClick={() => setMobileOpen(false)}>
                 Sign Up
               </Link>
             </div>

@@ -6,9 +6,11 @@ const orderRouter = require("./routes/order.routes");
 const adminRouter = require("./routes/admin.routes");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const compression = require("compression");
 
 const app = express();
 
+app.use(compression());
 app.use(express.json());
 app.use(cookieParser());
 app.use("/uploads", express.static("uploads"));
@@ -19,6 +21,7 @@ app.use(
   }),
 );
 
+app.get("/ping", (req, res) => res.status(200).send("pong"));
 
 app.use("/api/user", userRouter);
 app.use("/api/product", productRouter);

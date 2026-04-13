@@ -26,6 +26,7 @@ const productSchema = new mongoose.Schema(
     brand: {
       type: String,
       required: [true, "Brand is required"],
+      index: true,
     },
     images: [
       {
@@ -40,10 +41,13 @@ const productSchema = new mongoose.Schema(
     isActive: {
       type: Boolean,
       default: true,
+      index: true,
     },
   },
   { timestamps: true },
 );
+
+productSchema.index({ name: "text", category: 1 });
 
 const productModel = mongoose.model("product", productSchema);
 

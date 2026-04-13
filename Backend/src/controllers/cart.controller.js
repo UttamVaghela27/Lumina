@@ -9,6 +9,11 @@ const recalculateCart = (cart) => {
   let totalItems = 0;
 
   cart.items.forEach((item) => {
+    // Sync with product details if populated
+    if (item.productId && typeof item.productId === "object") {
+      item.name = item.productId.name || item.name;
+      item.price = item.productId.price || item.price;
+    }
     item.totalPrice = item.price * item.quantity;
     totalCartPrice += item.totalPrice;
     totalItems += item.quantity;
@@ -67,10 +72,8 @@ exports.addToCart = async (req, res) => {
       );
 
       if (itemIndex > -1) {
-        // Product exists, update quantity
         cart.items[itemIndex].quantity += quantity;
 
-        // Stock check again for the updated quantity
         if (product.stock < cart.items[itemIndex].quantity) {
           return res.status(400).json({
             success: false,
@@ -115,7 +118,7 @@ exports.addToCart = async (req, res) => {
 exports.getCart = async (req, res) => {
   try {
     const userId = req.user.id;
-    const cart = await cartModel
+    let cart = await cartModel
       .findOne({ userId })
       .populate("items.productId", "name price images stock");
 
@@ -125,6 +128,23 @@ exports.getCart = async (req, res) => {
         message: "Cart is empty",
         cart: { items: [], totalCartPrice: 0, totalItems: 0 },
       });
+    }
+
+    let hasChanges = false;
+    cart.items.forEach((item) => {
+      if (item.productId) {
+        if (
+          item.name !== item.productId.name ||
+          item.price !== item.productId.price
+        ) {
+          hasChanges = true;
+        }
+      }
+    });
+
+    if (hasChanges) {
+      cart = recalculateCart(cart);
+      await cart.save();
     }
 
     return res.status(200).json({
