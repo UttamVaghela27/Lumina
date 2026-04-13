@@ -1,49 +1,58 @@
 require("dotenv").config();
-const nodemailer = require("nodemailer");
+// const nodemailer = require("nodemailer");
+const { BrevoClient } = require("@getbrevo/brevo");
 const { google } = require("googleapis");
 
-const oAuth2Client = new google.auth.OAuth2(
-  process.env.GOOGLE_CLIENT_ID,
-  process.env.GOOGLE_CLIENT_SECRET,
-  "https://developers.google.com/oauthplayground",
-);
+let client;
 
-// set refresh token
-oAuth2Client.setCredentials({
-  refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
-});
-
-const sendEmail = async (to, subject, text, html) => {
-  try {
-    const accessToken = await oAuth2Client.getAccessToken();
-
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      family: 4,
-      auth: {
-        type: "OAuth2",
-        user: process.env.GOOGLE_USER,
-        clientId: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
-        accessToken: accessToken.token,
-      },
+function getBrevoClient() {
+  if (!client) {
+    if (!process.env.BREVO_PASS) {
+      console.error("❌ BREVO_PASS is missing from environment variables!");
+    }
+    client = new BrevoClient({
+      apiKey: process.env.BREVO_PASS,
     });
-
-    const info = await transporter.sendMail({
-      from: `"Medical Store" <${process.env.GOOGLE_USER}>`,
-      to,
-      subject,
-      text,
-      html,
-    });
-
-    console.log("✅ Email sent:", info.messageId);
-  } catch (error) {
-    console.error("❌ Email error:", error);
   }
-};
+  return client;
+}
+
+async function sendEmail(to, subject, text, html) {
+  if (typeof to === "object" && !Array.isArray(to)) {
+    const options = to;
+    to = options.to;
+    subject = options.subject;
+    text = options.text;
+    html = options.html;
+  }
+
+  try {
+    console.log("📤 Sending email via Brevo SDK to:", to);
+
+    const brevoClient = getBrevoClient();
+    const data = await brevoClient.transactionalEmails.sendTransacEmail({
+      subject: subject,
+      htmlContent: html,
+      sender: { name: "Lumina", email: process.env.GOOGLE_USER },
+      to: [{ email: to }],
+      textContent: text,
+    });
+
+    console.log(
+      "✅ Email sent successfully via Brevo SDK. Message ID:",
+      data.messageId,
+    );
+    return data;
+  } catch (error) {
+    console.error("❌ MAIL ERROR:", error.message);
+    if (error.response?.data) {
+      console.error(
+        "❌ BREVO RESPONSE ERROR:",
+        JSON.stringify(error.response.data),
+      );
+    }
+    throw error;
+  }
+}
 
 module.exports = sendEmail;
