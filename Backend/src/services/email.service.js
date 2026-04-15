@@ -1,5 +1,4 @@
 require("dotenv").config();
-// const nodemailer = require("nodemailer");
 const { BrevoClient } = require("@getbrevo/brevo");
 const { google } = require("googleapis");
 

@@ -1,9 +1,42 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Plus, Edit2, Trash2, BarChart2, X, Upload } from "lucide-react";
 import adminService from "../services/adminService";
 import api from "../../user/services/Axios";
 import toast from "react-hot-toast";
+import SkeletonTable from "../components/SkeletonTable";
 import "../styles/Products.css";
+
+// Memoized Row for performance
+const ProductRow = React.memo(({ product, handleOpenModal, handleDelete }) => {
+  return (
+    <tr>
+      <td>
+        <img
+          src={product.images?.[0]?.url || "/placeholder.png"}
+          alt={product.name}
+          className="product-table-img"
+          style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '4px' }}
+          loading="lazy"
+        />
+      </td>
+      <td style={{ fontWeight: 600 }}>{product.name}</td>
+      <td>₹{product.price}</td>
+      <td>₹{product.costPrice || 0}</td>
+      <td>{product.stock}</td>
+      <td>{product.category}</td>
+      <td>
+        <div className="table-actions">
+          <button className="action-btn edit-btn" title="Edit" onClick={() => handleOpenModal(product)}>
+            <Edit2 size={16} />
+          </button>
+          <button className="action-btn delete-btn" title="Delete" onClick={() => handleDelete(product._id)}>
+            <Trash2 size={16} />
+          </button>
+        </div>
+      </td>
+    </tr>
+  );
+});
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
@@ -53,7 +86,7 @@ const AdminProducts = () => {
     }
   };
 
-  const handleOpenModal = (product = null) => {
+  const handleOpenModal = useCallback((product = null) => {
     if (product) {
       setEditMode(true);
       setSelectedProduct(product);
@@ -71,7 +104,7 @@ const AdminProducts = () => {
       setFormData(initialFormState);
     }
     setModalOpen(true);
-  };
+  }, []);
 
   const handleCloseModal = () => {
     setModalOpen(false);
@@ -119,7 +152,7 @@ const AdminProducts = () => {
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = useCallback(async (id) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
         await adminService.deleteProduct(id);
@@ -129,7 +162,7 @@ const AdminProducts = () => {
         toast.error("Failed to delete product");
       }
     }
-  };
+  }, [currentPage]);
 
   return (
     <div className="products-page">
@@ -142,48 +175,38 @@ const AdminProducts = () => {
 
       <div className="admin-card">
         <div className="admin-table-container">
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Cost</th>
-                <th>Stock</th>
-                <th>Category</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.map((product) => (
-                <tr key={product._id}>
-                  <td>
-                    <img
-                      src={product.images?.[0]?.url || "/placeholder.png"}
-                      alt={product.name}
-                      className="product-table-img"
-                      style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '4px' }}
-                    />
-                  </td>
-                  <td style={{ fontWeight: 600 }}>{product.name}</td>
-                  <td>₹{product.price}</td>
-                  <td>₹{product.costPrice || 0}</td>
-                  <td>{product.stock}</td>
-                  <td>{product.category}</td>
-                  <td>
-                    <div className="table-actions">
-                      <button className="action-btn edit-btn" title="Edit" onClick={() => handleOpenModal(product)}>
-                        <Edit2 size={16} />
-                      </button>
-                      <button className="action-btn delete-btn" title="Delete" onClick={() => handleDelete(product._id)}>
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                  </td>
+          {loading ? (
+             <SkeletonTable rows={10} cols={7} />
+          ) : (
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Name</th>
+                  <th>Price</th>
+                  <th>Cost</th>
+                  <th>Stock</th>
+                  <th>Category</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {products.map((product) => (
+                   <ProductRow 
+                        key={product._id} 
+                        product={product} 
+                        handleOpenModal={handleOpenModal} 
+                        handleDelete={handleDelete} 
+                   />
+                ))}
+                {!loading && products.length === 0 && (
+                   <tr>
+                     <td colSpan="7" style={{ textAlign: 'center', padding: '40px' }}>No products found.</td>
+                   </tr>
+                )}
+              </tbody>
+            </table>
+          )}
         </div>
 
         {/* Pagination Controls */}

@@ -417,8 +417,14 @@ exports.getAllOrders = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    const total = await Order.countDocuments();
-    const orders = await Order.find()
+    const productId = req.query.productId;
+    const filter = {};
+    if (productId && productId !== "all") {
+      filter["items.productId"] = productId;
+    }
+
+    const total = await Order.countDocuments(filter);
+    const orders = await Order.find(filter)
       .populate("userId", "firstname lastname email")
       .sort({ createdAt: -1 })
       .skip(skip)

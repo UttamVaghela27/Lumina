@@ -108,16 +108,21 @@ const orderSchema = new mongoose.Schema(
     returnRequest: {
       isRequested: { type: Boolean, default: false },
       reason: { type: String },
-      status: { 
-        type: String, 
-        enum: ["none", "pending", "approved", "rejected"], 
-        default: "none" 
+      status: {
+        type: String,
+        enum: ["none", "pending", "approved", "rejected"],
+        default: "none",
       },
-      requestedAt: { type: Date }
+      requestedAt: { type: Date },
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
+
+orderSchema.index({ orderStatus: 1 });
+orderSchema.index({ "items.productId": 1 });
+orderSchema.index({ createdAt: -1 });
+orderSchema.index({ userId: 1 });
 
 const Order = mongoose.model("Order", orderSchema);
 
