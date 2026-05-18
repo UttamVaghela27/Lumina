@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import Navbar from "./user/components/Navbar";
 import Footer from "./user/components/Footer";
 import AppRoutes from "./user/components/AppRoutes";
+import ScrollToTop from "./user/components/ScrollToTop";
 
 import { Toaster } from "react-hot-toast";
 import { useAuth } from "./user/hooks/useAuth";
@@ -40,6 +41,7 @@ const App = () => {
 
   return (
     <div>
+      <ScrollToTop />
       <Toaster position="top-center" reverseOrder={false} />
 
       {!isAdminPath && <Navbar />}
